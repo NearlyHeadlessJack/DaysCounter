@@ -62,6 +62,10 @@ fn run(args: clap::ArgMatches) {
         println!("输入的日期有误！请重新检查闰月。");
         return;
     }
+    if !regular_day_check(date_start) || !regular_day_check(date_end) {
+        println!("输入的日期有误！请重新检查日期。");
+        return;
+    }
     calculator(date_start, date_end);
 }
 
@@ -132,6 +136,11 @@ fn leap_day_check((year, month, day): (i32, i32, i32)) -> bool {
         }
     }
     true
+}
+
+fn regular_day_check((_year, month, day): (i32, i32, i32)) -> bool {
+    let m_days: [i32; 12] = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    day <= m_days[(month - 1) as usize]
 }
 
 #[cfg(test)]
