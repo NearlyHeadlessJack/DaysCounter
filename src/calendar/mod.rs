@@ -74,7 +74,9 @@ fn check_reach(
     false
 }
 fn check_leap(year: i32) -> bool {
-    if year % 4 == 0 && year % 100 != 0 || year % 400 == 0 {
+    if year % 4 == 0 && year % 100 != 0 {
+        return true;
+    } else if year % 400 == 0 {
         return true;
     }
     false
