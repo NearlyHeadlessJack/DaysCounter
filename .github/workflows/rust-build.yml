@@ -22,4 +22,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: build-macos-x86_64
-        run: cargo build --target x86_64-apple-darwin
+        run: rustup target add x86_64-apple-darwin && cargo build --target x86_64-apple-darwin
