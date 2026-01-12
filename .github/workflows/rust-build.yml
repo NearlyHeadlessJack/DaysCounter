@@ -125,37 +125,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Set up Docker-based cross compilation
+        uses: docker/setup-qemu-action@v3
         with:
-          toolchain: stable
-          targets: loongarch64-unknown-linux-gnu
-      - name: Install cross-compilation dependencies
+          platforms: linux/loong64
+
+      - name: Build with cross
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            gcc-loongarch64-linux-gnu \
-            g++-loongarch64-linux-gnu \
-            binutils-loongarch64-linux-gnu \
-            qemu-user-static
-          loongarch64-linux-gnu-gcc --version
-      - name: Configure cargo for cross-compilation
-        run: |
-          cat > ./Cargo.toml << 'EOF'
-          [target.loongarch64-unknown-linux-gnu]
-          linker = "loongarch64-linux-gnu-gcc"
-          ar = "loongarch64-linux-gnu-ar"
-          runner = "qemu-loongarch64-static"
-          
-          [build]
-          target = "loongarch64-unknown-linux-gnu"
-          EOF
-          
-      - name: Build release binary
-        run: |
-          cargo build --release --target=loongarch64-unknown-linux-gnu
-          file target/loongarch64-unknown-linux-gnu/release/$(basename $PWD)
-          
+          cargo install cross --git https://github.com/cross-rs/cross
+
+          cross build --release --target loongarch64-unknown-linux-gnu
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
