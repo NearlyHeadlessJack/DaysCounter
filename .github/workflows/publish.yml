@@ -1,17 +1,23 @@
 name: Publish to Github and Crates.io
 on:
-  workflow_call
+  push:
+    tags:
+      - "v*"
+permissions:
+  contents: write
 
 
 jobs:
-  publish_github:
+  publish_github_release:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v6
+    - name: show
+      run: |
+        echo "tag: ${{ github.ref }}"
+        echo "tag_name: ${{ github.ref_name }}"
+        ls
     - name: Release
       uses: softprops/action-gh-release@v2
       if: github.ref_type == 'tag'
-      with:
-        files: |
-          CHANGELOG.md
