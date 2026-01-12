@@ -187,6 +187,13 @@ mod tests {
                     .default_value(date_e)
                     .help("输入结束日期"),
             )
+            .arg(
+                Arg::new("version")
+                    .short('v')
+                    .long("version")
+                    .action(clap::ArgAction::SetFalse)
+                    .help("显示版本信息"),
+            )
             .get_matches();
         args
     }
