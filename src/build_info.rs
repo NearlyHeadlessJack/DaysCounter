@@ -31,10 +31,10 @@ fn get_build_target_os() -> String {
     #[cfg(target_os = "windows")]
     return "windows".to_string();
 
-    #[cfg(target_os = "darwin")]
-    return "darin".to_string();
+    #[cfg(target_os = "macos")]
+    return "darwin".to_string();
 
-    return "macos".to_string();
+    return "unknown".to_string();
 }
 fn get_build_target_vendor() -> String {
     #[cfg(target_vendor = "apple")]
