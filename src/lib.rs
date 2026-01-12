@@ -48,7 +48,7 @@ pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
         days = -days;
     }
     println!("{}", days);
-    return days;
+    days
 }
 
 fn check_order(

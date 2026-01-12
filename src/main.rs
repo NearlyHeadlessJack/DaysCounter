@@ -1,15 +1,7 @@
 use clap::{Arg, Command};
 use days_counter::calculator;
-#[allow(unused_imports)]
-use log::{debug, error, info, warn};
 
 fn main() {
-    flexi_logger::Logger::try_with_str("info, my::module=debug")
-        .unwrap()
-        .log_to_file(flexi_logger::FileSpec::default().directory("logs")) // 设置日志目录
-        .start()
-        .unwrap();
-    debug!("日志将保存到 logs/ 目录");
     let args = Command::new("days-counter")
         .about("测试程序")
         .after_help(

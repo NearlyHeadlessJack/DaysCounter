@@ -1,26 +1,27 @@
-use log::{debug, error, info, warn};
 fn create_calendar(is_leap_year: bool) -> [[u8; 31]; 12] {
     let regular_months: [usize; 12] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let leap_year_months: [usize; 12] = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     // 0-1月，10-11月，11-12月
     let mut m: [[u8; 31]; 12] = [[0; 31]; 12];
 
-    let month = |b, i: usize| -> usize {
-        if b {
+    let month = |leap, i: usize| -> usize {
+        if leap {
             leap_year_months[i]
         } else {
             regular_months[i]
         }
     };
     for i in 0..12 {
-        for j in 0..31 {
+        for j in 0..=31 {
             if j >= month(is_leap_year, i) {
+                #[cfg(debug_assertions)]
+                println!("第{}月,传入{}天", i + 1, month(is_leap_year, i));
+
                 break;
             }
             m[i][j] = 1;
         }
     }
-    debug!("成功创建日历数组(闰年:{:?})：\n{:?}", is_leap_year, m);
     m
 }
 
@@ -33,14 +34,20 @@ pub fn main(
     // 算法一，创建所有日期的总日历.
     let mut calendar: Vec<[[u8; 31]; 12]> = Vec::new();
     for year in start_year..=end_year {
+        println!(
+            "-正在创建日历，年份:{:?},是否闰年:{:?}",
+            year,
+            check_leap(year)
+        );
         calendar.push(create_calendar(check_leap(year)));
     }
+    let original_start_year = start_year;
     while !check_reach(
         (start_year, start_month, start_day),
         (end_year, end_month, end_day),
     ) {
-        total_days += calendar[(end_year - start_year) as usize][(start_month - 1) as usize]
-            [(start_day - 1) as usize] as i32;
+        total_days += calendar[(start_year - original_start_year) as usize]
+            [(start_month - 1) as usize][(start_day - 1) as usize] as i32;
         if start_month == 12 && start_day == 31 {
             start_month = 1;
             start_year += 1;
@@ -85,7 +92,6 @@ fn check_leap(year: i32) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use log::info;
     #[test]
     fn test_create_calendar() {
         let m = create_calendar(true);
