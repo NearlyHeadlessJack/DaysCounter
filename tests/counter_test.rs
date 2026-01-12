@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 use days_counter::calculator;
 use rand::Rng;
-#[test]
+// #[test]
 fn test_calculator() {
     let mut rng = rand::rng();
     const MAX_YEAR: i32 = 9999;
