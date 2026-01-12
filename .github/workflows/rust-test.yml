@@ -6,7 +6,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  all_tests:
 
     runs-on: ubuntu-latest
 

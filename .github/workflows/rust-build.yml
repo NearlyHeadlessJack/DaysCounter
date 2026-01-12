@@ -83,3 +83,32 @@ jobs:
           retention-days: 7
           name: days-counter_x86_64-pc-windows-msvc
 
+  build_macos_universal:
+    needs: [build-macos-x86_64, build-macos-aarch64]
+    runs-on: macos-latest
+    steps:
+
+      - uses: actions/download-artifact@v4
+        name: Download artifacts_arm_macos
+        with:
+          artifact-ids: days-counter_aarch64-apple-darwin
+      - uses: actions/download-artifact@v4
+        name: Download artifacts_x86_64_macos
+        with:
+          artifact-ids: days-counter_x86_64-apple-darwin
+
+      - name: Merge artifacts
+        run: |
+          lipo -create \
+          days-counter_x86_64-apple-darwin/days-counter\
+          days-counter_aarch64-apple-darwin/days-counter\
+          -output days-counter_macos_universal
+
+      - uses: actions/upload-artifact@v4
+        name: Upload binary artifact
+        with:
+          path: ./days-counter_macos_universal
+          if-no-files-found: error
+          retention-days: 7
+          name: days-counter_macos_universal
+
