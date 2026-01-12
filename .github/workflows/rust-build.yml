@@ -126,14 +126,55 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: sha
-        run: echo ${{ github.sha }} > Release.txt
-      - name: cat
-        run: cat Release.txt
+      - name: init_mkdir
+        run: |
+          mkdir ./macos_amd64
+          mkdir ./macos_arm64
+          mkdir ./linux_amd64
+          mkdir ./windows_amd64
+      - name: Download_macos_x86
+        uses: actions/download-artifact@v4
+        with:
+          name: days-counter_x86_64-apple-darwin
+          path: ./macos_amd64/
+
+      - name: Download_macos_arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: days-counter_aarch64-apple-darwin
+          path: ./macos_arm64/
+
+      - name: Download_linux_x86
+        uses: actions/download-artifact@v4
+        with:
+          name: days-counter_x86_64-unknown-linux-gnu
+          path: ./linux_amd64/
+
+      - name: Download_windows_x86
+        uses: actions/download-artifact@v4
+        with:
+          name: days-counter_x86_64-pc-windows-msvc
+          path: ./windows_amd64/
+
+      - name: fetch_version
+        run: |
+          cargo install toml-cli
+          RELEASE_VERSION=$(toml get Cargo.toml package.version --raw)
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+
+      - name: rename
+        run: |
+          mv ./macos_amd64/days_counter ./macos_amd64/days-counter-v${RELEASE_VERSION}-x86_64-apple-darwin
+          mv ./macos_arm64/days_counter ./macos_arm64/days-counter-v${RELEASE_VERSION}-aarch64-apple-darwin
+          mv ./linux_amd64/days_counter ./linux_amd64/days-counter-v${RELEASE_VERSION}-x86_64-unknown-linux-gnu
+          mv ./windows_amd64/days_counter.exe ./windows_amd64/days-counter-v${RELEASE_VERSION}-x86_64-pc-windows-msvc.exe
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG.md
           files: |
-            Release.txt
+            ./macos_amd64/days-counter-v${{ env.RELEASE_VERSION }}-x86_64-apple-darwin
+            ./macos_arm64/days-counter-v${{ env.RELEASE_VERSION }}-aarch64-apple-darwin
+            ./linux_amd64/days-counter-v${{ env.RELEASE_VERSION }}-x86_64-unknown-linux-gnu
+            ./windows_amd64/days-counter-v${{ env.RELEASE_VERSION }}-x86_64-pc-windows-msvc.exe
             
