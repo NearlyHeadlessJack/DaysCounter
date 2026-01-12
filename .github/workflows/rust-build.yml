@@ -25,6 +25,8 @@ jobs:
       - name: build-macos-x86_64
         run: rustup target add x86_64-apple-darwin && cargo build --release --target x86_64-apple-darwin
 
+      - name: show
+        run: ls -lh ./target
 
       - uses: actions/upload-artifact@v4
         name: Upload binary artifact
