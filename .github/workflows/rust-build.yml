@@ -20,7 +20,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-
       - uses: actions/checkout@v4
       - name: build-macos-x86_64
         run: rustup target add x86_64-apple-darwin && cargo build --release --target x86_64-apple-darwin
@@ -31,7 +30,7 @@ jobs:
         name: Upload binary artifact
         with:
           path: ./target/x86_64-apple-darwin/release/days_counter
-          retention-days: 90
+          retention-days: 7
           if-no-files-found: error
           name: days-counter_x86_64-apple-darwin
 
@@ -46,6 +45,37 @@ jobs:
         name: Upload binary artifact
         with:
           path: ./target/aarch64-apple-darwin/release/days_counter
-          retention-days: 90
+          retention-days: 7
           if-no-files-found: error
           name: days-counter_aarch64-apple-darwin
+
+  build-linux-x86_64-gnu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build-linux-x86_64-gnu
+        run: rustup target add x86_64-unknown-linux-gnu && cargo build --release --target x86_64-unknown-linux-gnu
+
+      - uses: actions/upload-artifact@v4
+        name: Upload binary artifact
+        with:
+          path: ./target/x86_64-unknown-linux-gnu/release/days_counter
+          if-no-files-found: error
+          retention-days: 7
+          name: days-counter_x86_64-unknown-linux-gnu
+
+  build-windows-x86_64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build-windows-x86_64-msvc
+        run: rustup target add x86_64-pc-windows-msvc && cargo build --release --target x86_64-pc-windows-msvc
+
+      - uses: actions/upload-artifact@v4
+        name: Upload binary artifact
+        with:
+          path: ./target/x86_64-pc-windows-msvc/release/days_counter.exe
+          if-no-files-found: error
+          retention-days: 7
+          name: days-counter_x86_64-pc-windows-msvc
+
