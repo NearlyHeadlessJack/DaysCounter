@@ -119,6 +119,50 @@ jobs:
           retention-days: 7
           name: days-counter_macos_universal
 
+
+  build_loongarch64_on_x86:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: loongarch64-unknown-linux-gnu
+      - name: Install cross-compilation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc-loongarch64-linux-gnu \
+            g++-loongarch64-linux-gnu \
+            binutils-loongarch64-linux-gnu \
+            qemu-user-static
+          loongarch64-linux-gnu-gcc --version
+      - name: Configure cargo for cross-compilation
+        run: |
+          cat > ./Cargo.toml << 'EOF'
+          [target.loongarch64-unknown-linux-gnu]
+          linker = "loongarch64-linux-gnu-gcc"
+          ar = "loongarch64-linux-gnu-ar"
+          runner = "qemu-loongarch64-static"
+          
+          [build]
+          target = "loongarch64-unknown-linux-gnu"
+          EOF
+          
+      - name: Build release binary
+        run: |
+          cargo build --release --target=loongarch64-unknown-linux-gnu
+          file target/loongarch64-unknown-linux-gnu/release/$(basename $PWD)
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: loongarch64-binary
+          path: ./target/loongarch64-unknown-linux-gnu/release/days_counter
+          if-no-files-found: error
+
   publish_release_github:
     runs-on: ubuntu-latest
     needs: [build_macos_universal, build-linux-x86_64-gnu, build-windows-x86_64, build-macos-x86_64, build-macos-aarch64]
