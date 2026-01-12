@@ -87,23 +87,30 @@ jobs:
     needs: [build-macos-x86_64, build-macos-aarch64]
     runs-on: macos-latest
     steps:
+      - name: mkdir
+        run: |
+          mkdir  x86
+          mkdir arm
 
       - uses: actions/download-artifact@v4
         name: Download artifacts_arm_macos
         with:
           name: days-counter_aarch64-apple-darwin
+          path: ./arm
       - uses: actions/download-artifact@v4
         name: Download artifacts_x86_64_macos
         with:
           name: days-counter_x86_64-apple-darwin
+          path: ./x86
 
       - name: unzip
         run: |
           ls
+          ls x86
 
       - name: Merge artifacts
         run: |
-          lipo  days-counter  days_counter\ 2 -create -output days-counter_macos_universal
+          lipo  ./x86/days-counter  ./arm/days_counter -create -output days-counter_macos_universal
 
       - uses: actions/upload-artifact@v4
         name: Upload binary artifact
