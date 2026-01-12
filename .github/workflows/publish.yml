@@ -6,3 +6,8 @@ on:
 jobs:
   test:
     runs-on: macos-latest
+    steps:
+      - name: mkdir
+        run: |
+          mkdir ./x86
+          mkdir ./arm
