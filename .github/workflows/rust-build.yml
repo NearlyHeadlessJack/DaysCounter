@@ -23,3 +23,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: build-macos-x86_64
         run: rustup target add x86_64-apple-darwin && cargo build --target x86_64-apple-darwin
+
+  build-macos-aarch64:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: build-macos-aarch64
+        run: rustup target add aarch64-apple-darwin && cargo build --target aarch64-apple-darwin
