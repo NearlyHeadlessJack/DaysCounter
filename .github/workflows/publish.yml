@@ -4,10 +4,15 @@ on:
 
 
 jobs:
-  test:
-    runs-on: macos-latest
+  publish_github:
+    runs-on: ubuntu-latest
     steps:
-      - name: mkdir
-        run: |
-          mkdir ./x86
-          mkdir ./arm
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: |
+        CHANGELOG.md
+        LICENSE
