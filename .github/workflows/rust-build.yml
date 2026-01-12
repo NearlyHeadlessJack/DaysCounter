@@ -15,3 +15,11 @@ env:
 jobs:
   tests:
     uses: ./.github/workflows/rust-test.yml
+
+  build-macos-x86_64:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: build-macos-x86_64
+        run: cargo build --target x86_64-apple-darwin
