@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/rust-test.yml
 
   build-macos-x86_64:
-    needs: tests
+#    needs: tests
     runs-on: macos-15-intel
 
     steps:
@@ -36,7 +36,7 @@ jobs:
           name: days-counter_x86_64-apple-darwin
 
   build-macos-aarch64:
-    needs: tests
+#    needs: tests
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
           name: days-counter_aarch64-apple-darwin
 
   build-linux-x86_64-gnu:
-    needs: tests
+#    needs: tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
           name: days-counter_x86_64-unknown-linux-gnu
 
   build-windows-x86_64:
-    needs: tests
+#    needs: tests
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -99,9 +99,10 @@ jobs:
 
       - name: Merge artifacts
         run: |
-          lipo -create \
+          lipo  \
           days-counter_x86_64-apple-darwin/days-counter\
           days-counter_aarch64-apple-darwin/days-counter\
+          -create \
           -output days-counter_macos_universal
 
       - uses: actions/upload-artifact@v4
