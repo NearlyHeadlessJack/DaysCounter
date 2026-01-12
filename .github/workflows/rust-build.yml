@@ -26,12 +26,11 @@ jobs:
         run: rustup target add x86_64-apple-darwin && cargo build --release --target x86_64-apple-darwin
 
       - name: show
-        run: ls -lh ./target/release
-
+        run: ls ./target/x86_64-apple-darwin
       - uses: actions/upload-artifact@v4
         name: Upload binary artifact
         with:
-          path: ./target/release/*
+          path: ./target/x86_64-apple-darwin/*
           retention-days: 90
           if-no-files-found: error
           name: days-counter_x86_64-apple-darwin
