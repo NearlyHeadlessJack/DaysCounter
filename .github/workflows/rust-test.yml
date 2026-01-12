@@ -1,10 +1,6 @@
-name: Rust-Test
+name: Test
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: workflow_call
 
 env:
   CARGO_TERM_COLOR: always

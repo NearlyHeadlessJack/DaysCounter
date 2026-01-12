@@ -1,100 +1,17 @@
-name: Build Release Binaries
+name: Build
 
 on:
-  workflow_dispatch:  # 允许手动触发
   push:
-    branches: [ main ]
-    tags: [ 'v*' ]  # 发布版本时自动构建
-  pull_request:
-    branches: [ main ]
-  workflow_run:
-    workflows: [ "Rust-Test" ]
-    types:
-      - completed
+    paths:
+      - ".github/**"
+      - "src/**"
+      - "tests/**"
+      - "*.rs"
+      - "Cargo.toml"
+      - "Cargo.lock"
+env:
+  IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
-
-
-  build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            artifact_name: linux-x86_64
-            use_cross: false
-
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            artifact_name: windows-x86_64
-            use_cross: false
-
-          - target: x86_64-apple-darwin
-            os: macos-latest
-            artifact_name: macos-x86_64
-            use_cross: false
-
-          - target: aarch64-apple-darwin
-            os: macos-latest  # M1 Mac runner可以编译ARM64
-            artifact_name: macos-arm64
-            use_cross: false
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          targets: ${{ matrix.target }}
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Build release binary
-        run: |
-          cargo build --release --target ${{ matrix.target }}
-          # 对于Windows平台，可执行文件有.exe后缀
-          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
-            echo "BINARY_NAME=app.exe" >> $GITHUB_ENV
-          else
-            echo "BINARY_NAME=app" >> $GITHUB_ENV
-          fi
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: |
-            target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}
-          if-no-files-found: error
-          retention-days: 7
-
-  release:
-    needs: build
-    if: startsWith(github.ref, 'refs/tags/v')  # 仅在有tag时创建Release
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: List files
-        run: find artifacts -type f
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            artifacts/**/*
-          generate_release_notes: true
+  tests:
+    uses: ./.github/workflows/rust-test.yml
