@@ -7,14 +7,16 @@ on:
     tags: [ 'v*' ]  # 发布版本时自动构建
   pull_request:
     branches: [ main ]
+  workflow_run:
+    workflows: [ "Rust-Test" ]
+    types:
+      - completed
 
 jobs:
-  test:
-    uses: ./.github/workflows/rust-test.yml  # 使用你现有的测试工作流
+
 
   build:
-    needs: test  # 等待测试完成
-    if: success()  # 只有测试成功时才构建
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
