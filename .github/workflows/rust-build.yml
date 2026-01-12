@@ -11,13 +11,14 @@ on:
       - "Cargo.lock"
 env:
   IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+  MAX_DAY: 7
 
 jobs:
   tests:
     uses: ./.github/workflows/rust-test.yml
 
   build-macos-x86_64:
-#    needs: tests
+    needs: tests
     runs-on: macos-15-intel
 
     steps:
@@ -36,7 +37,7 @@ jobs:
           name: days-counter_x86_64-apple-darwin
 
   build-macos-aarch64:
-#    needs: tests
+    needs: tests
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +53,7 @@ jobs:
           name: days-counter_aarch64-apple-darwin
 
   build-linux-x86_64-gnu:
-#    needs: tests
+    needs: tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,7 +69,7 @@ jobs:
           name: days-counter_x86_64-unknown-linux-gnu
 
   build-windows-x86_64:
-#    needs: tests
+    needs: tests
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4

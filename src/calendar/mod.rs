@@ -34,11 +34,13 @@ pub fn main(
     // 算法一，创建所有日期的总日历.
     let mut calendar: Vec<[[u8; 31]; 12]> = Vec::new();
     for year in start_year..=end_year {
+        #[cfg(debug_assertions)]
         println!(
             "-正在创建日历，年份:{:?},是否闰年:{:?}",
             year,
             check_leap(year)
         );
+
         calendar.push(create_calendar(check_leap(year)));
     }
     let original_start_year = start_year;

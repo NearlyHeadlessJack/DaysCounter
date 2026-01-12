@@ -22,8 +22,8 @@ impl Display for Order {
 
 pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
     println!(
-        "计算程序开始，第一个日期:{:?}\n\
-    第二个日期:{:?}",
+        "开始日期为: {:?}\n\
+    结束日期为: {:?}",
         date1, date2
     );
 
@@ -43,11 +43,12 @@ pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
 
     #[cfg(debug_assertions)]
     println!("{}", order);
+
     let mut days = calendar::main(year1, year2);
     if order == Order::Desc {
         days = -days;
     }
-    println!("{}", days);
+    println!("间隔 {} 天", days);
     days
 }
 
