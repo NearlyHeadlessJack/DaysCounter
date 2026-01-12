@@ -1,3 +1,5 @@
+mod build_info;
+
 use clap::{Arg, Command};
 use days_counter::calculator;
 
@@ -13,7 +15,7 @@ fn main() {
                 .short('s')
                 .long("start")
                 .value_name("DATE_START")
-                .required(true)
+                // .required(true)
                 .help("输入开始日期"),
         )
         .arg(
@@ -21,14 +23,25 @@ fn main() {
                 .short('e')
                 .long("end")
                 .value_name("DATE_END")
-                .required(true)
+                // .required(true)
                 .help("输入结束日期"),
+        )
+        .arg(
+            Arg::new("version")
+                .short('v')
+                .long("version")
+                .action(clap::ArgAction::SetTrue)
+                .help("显示版本信息"),
         )
         .get_matches();
 
     run(args);
 }
 fn run(args: clap::ArgMatches) {
+    if args.get_flag("version") {
+        build_info::show_version_info();
+        return;
+    }
     let data_s: String;
     let data_e: String;
     if let Some(date1) = args.get_one::<String>("start_date") {

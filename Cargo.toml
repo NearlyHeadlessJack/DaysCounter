@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 clap = "4.5.54"
+chrono = "0.4.42"
 
 
 [dev-dependencies]
