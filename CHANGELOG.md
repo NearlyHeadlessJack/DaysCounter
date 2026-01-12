@@ -1,6 +1,7 @@
-hello world
+## 使用方法
+`days-counter -s 2020-01-01 -e 20200102`
 
-**hello**
+`days_counter -start 20010204 -end 2019-04-02`
 
-# hI
-
+## 注意事项
+- 仅支持1900年1月1日至9999年12月31日之间计算
