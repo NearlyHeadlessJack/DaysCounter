@@ -33,7 +33,7 @@ fn run(args: clap::ArgMatches) {
     let data_e: String;
     if let Some(date1) = args.get_one::<String>("start_date") {
         #[cfg(debug_assertions)]
-        println!("start date: {}", date1);
+        println!("[DEBUG]start date: {}", date1);
         data_s = date1.to_string();
     } else {
         println!(
@@ -45,7 +45,7 @@ fn run(args: clap::ArgMatches) {
 
     if let Some(date2) = args.get_one::<String>("end_date") {
         #[cfg(debug_assertions)]
-        println!("end date: {}", date2);
+        println!("[DEBUG]end date: {}", date2);
         data_e = date2.to_string();
     } else {
         println!(

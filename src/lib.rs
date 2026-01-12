@@ -22,9 +22,9 @@ impl Display for Order {
 
 pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
     println!(
-        "开始日期为: {:?}\n\
-    结束日期为: {:?}",
-        date1, date2
+        "开始日期为: {}年{}月{}日\n\
+    结束日期为: {}年{}月{}日",
+        date1.0, date1.1, date1.2, date2.0, date2.1, date2.2
     );
 
     let order: Order = check_order(date1, date2);
@@ -42,7 +42,7 @@ pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
     }
 
     #[cfg(debug_assertions)]
-    println!("{}", order);
+    println!("[DEBUG]{}", order);
 
     let mut days = calendar::main(year1, year2);
     if order == Order::Desc {

@@ -15,7 +15,7 @@ fn create_calendar(is_leap_year: bool) -> [[u8; 31]; 12] {
         for j in 0..=31 {
             if j >= month(is_leap_year, i) {
                 #[cfg(debug_assertions)]
-                println!("第{}月,传入{}天", i + 1, month(is_leap_year, i));
+                println!("[DEBUG]第{}月,传入{}天", i + 1, month(is_leap_year, i));
 
                 break;
             }
@@ -36,7 +36,7 @@ pub fn main(
     for year in start_year..=end_year {
         #[cfg(debug_assertions)]
         println!(
-            "-正在创建日历，年份:{:?},是否闰年:{:?}",
+            "[DEBUG]正在创建日历，年份:{:?},是否闰年:{:?}",
             year,
             check_leap(year)
         );
