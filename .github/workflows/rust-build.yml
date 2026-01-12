@@ -15,6 +15,7 @@ env:
   IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/') }}
   MAX_DAY: 7
 
+
 jobs:
   tests:
     uses: ./.github/workflows/rust-test.yml
