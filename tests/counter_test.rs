@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 use days_counter::calculator;
 use rand::Rng;
-// #[test]
+#[test]
 fn test_calculator() {
     let mut rng = rand::rng();
     const MAX_YEAR: i32 = 9999;
@@ -16,8 +16,8 @@ fn test_calculator() {
         assert_eq!(
             chrono_days((year1, month1, day1), (year2, month2, day2)),
             calculator(
-                (year1 as i32, month1 as i32, day1 as i32),
-                (year2 as i32, month2 as i32, day2 as i32)
+                (year1, month1 as i32, day1 as i32),
+                (year2, month2 as i32, day2 as i32)
             )
         );
     }
@@ -30,5 +30,5 @@ fn chrono_days((y1, m1, d1): (i32, u32, u32), (y2, m2, d2): (i32, u32, u32)) -> 
 
     // 计算天数差
     let days = end.signed_duration_since(start).num_days();
-    return days as i32;
+    days as i32
 }
