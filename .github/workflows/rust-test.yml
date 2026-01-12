@@ -2,128 +2,15 @@ name: Test
 
 on: workflow_call
 
-# 设置工作流环境变量
 env:
-  # Rust项目名称，用于生成二进制文件名
-  PROJECT_NAME: "my-rust-project"
-  # 构建类型（release/debug）
-  BUILD_TYPE: "release"
+  CARGO_TERM_COLOR: always
 
 jobs:
   build:
-    # 让任务在多个平台上并行运行
-    runs-on: ${{ matrix.os }}
 
-    # 定义构建矩阵，指定不同的操作系统和架构
-    strategy:
-      matrix:
-        include:
-          # macOS Intel (x86_64)
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            artifact_name: macos-x86_64
-            # macOS上需要指定架构
-            rust_target: x86_64-apple-darwin
-
-          # macOS Apple Silicon (ARM64)
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            artifact_name: macos-aarch64
-            rust_target: aarch64-apple-darwin
-
-          # Linux x86_64
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            artifact_name: linux-x86_64
-            rust_target: x86_64-unknown-linux-gnu
-
-          # Windows x86_64
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            artifact_name: windows-x86_64
-            rust_target: x86_64-pc-windows-msvc
-            # Windows上的二进制文件扩展名
-            binary_ext: ".exe"
+    runs-on: ubuntu-latest
 
     steps:
-      # 步骤1: 检出代码库
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # 步骤2: 安装Rust工具链
-      - name: Install Rust
-        # 使用rust-action安装Rust，指定默认工具链
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          # 为当前平台安装对应的目标工具链
-          targets: ${{ matrix.rust_target }}
-          # 安装常用的Rust组件
-          components: rustfmt, clippy
-
-      # 步骤3: 为Linux平台安装交叉编译依赖（如果需要）
-      - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          # 安装构建Linux目标所需的基本库
-          sudo apt-get update
-          sudo apt-get install -y gcc-multilib
-
-      # 步骤4: 添加目标平台到Rust（如果尚未安装）
-      - name: Add Rust target
-        run: |
-          # 添加对应的目标平台到rustc
-          rustup target add ${{ matrix.target }}
-
-      # 步骤5: 构建Rust项目
-      - name: Build project
-        run: |
-          # 使用cargo构建项目，指定目标平台和构建类型
-          cargo build --target ${{ matrix.target }} --${{ env.BUILD_TYPE }}
-          echo "构建完成！"
-
-      # 步骤6: 准备二进制文件（重命名和整理）
-      - name: Prepare binary artifact
-        run: |
-          # 定义构建目录和输出目录
-          BUILD_DIR="./target/${{ matrix.target }}/${{ env.BUILD_TYPE }}"
-          OUTPUT_DIR="./artifacts"
-          
-          # 创建输出目录
-          mkdir -p $OUTPUT_DIR
-          
-          # 确定二进制文件名和扩展名
-          # Windows使用.exe扩展名，其他平台无扩展名
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            BINARY_EXT=".exe"
-          else
-            BINARY_EXT=""
-          fi
-          
-          # 源二进制文件路径
-          SRC_BINARY="$BUILD_DIR/${{ env.PROJECT_NAME }}$BINARY_EXT"
-          
-          # 目标文件名（包含平台信息）
-          DEST_BINARY="$OUTPUT_DIR/${{ env.PROJECT_NAME }}-${{ matrix.artifact_name }}$BINARY_EXT"
-          
-          # 复制并重命名二进制文件
-          cp "$SRC_BINARY" "$DEST_BINARY"
-          
-          # 在Unix系统上，为二进制文件添加执行权限
-          if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            chmod +x "$DEST_BINARY"
-          fi
-          
-          echo "二进制文件已准备: $DEST_BINARY"
-
-      # 步骤7: 上传构建产物到GitHub Actions
-      - name: Upload binary artifact
-        uses: actions/upload-artifact@v4
-        with:
-          # 上传整个artifacts目录
-          name: ${{ matrix.artifact_name }}-binary
-          path: ./artifacts/
-          # 设置较长的保留时间（90天）
-          retention-days: 90
-          # 如果构建失败，则不上传产物
-          if-no-files-found: error
-
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: cargo test --verbose
