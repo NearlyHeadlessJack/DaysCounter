@@ -91,11 +91,11 @@ jobs:
       - uses: actions/download-artifact@v4
         name: Download artifacts_arm_macos
         with:
-          artifact-ids: days-counter_aarch64-apple-darwin
+          name: days-counter_aarch64-apple-darwin
       - uses: actions/download-artifact@v4
         name: Download artifacts_x86_64_macos
         with:
-          artifact-ids: days-counter_x86_64-apple-darwin
+          name: days-counter_x86_64-apple-darwin
 
       - name: Merge artifacts
         run: |
