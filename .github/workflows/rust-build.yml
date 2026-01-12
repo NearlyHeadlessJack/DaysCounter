@@ -30,7 +30,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload binary artifact
         with:
-          path: ./target/x86_64-apple-darwin/*
+          path: ./target/x86_64-apple-darwin/release/days_counter
           retention-days: 90
           if-no-files-found: error
           name: days-counter_x86_64-apple-darwin
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload binary artifact
         with:
-          path: ./target/release/*
+          path: ./target/aarch64-apple-darwin/release/days_counter
           retention-days: 90
           if-no-files-found: error
           name: days-counter_aarch64-apple-darwin
