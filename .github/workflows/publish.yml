@@ -1,0 +1,8 @@
+name: Publish to Github and Crates.io
+on:
+  workflow_call
+
+
+jobs:
+  test:
+    runs-on: macos-latest
