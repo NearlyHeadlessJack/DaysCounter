@@ -89,28 +89,28 @@ jobs:
     steps:
       - name: mkdir
         run: |
-          mkdir  x86
-          mkdir arm
+          mkdir ./x86
+          mkdir ./arm
 
       - uses: actions/download-artifact@v4
         name: Download artifacts_arm_macos
         with:
           name: days-counter_aarch64-apple-darwin
-          path: ./arm
+          path: ./arm/
       - uses: actions/download-artifact@v4
         name: Download artifacts_x86_64_macos
         with:
           name: days-counter_x86_64-apple-darwin
-          path: ./x86
+          path: ./x86/
 
       - name: unzip
         run: |
-          ls
           ls x86
+          ls arm
 
       - name: Merge artifacts
         run: |
-          lipo  ./x86/days-counter  ./arm/days_counter -create -output days-counter_macos_universal
+          lipo  ./x86/days_counter  ./arm/days_counter -create -output days-counter_macos_universal
 
       - uses: actions/upload-artifact@v4
         name: Upload binary artifact
