@@ -26,22 +26,22 @@ fn main() {
                 // .required(true)
                 .help("输入结束日期"),
         )
-        .arg(
-            Arg::new("version")
-                .short('v')
-                .long("version")
-                .action(clap::ArgAction::SetTrue)
-                .help("显示版本信息"),
-        )
+        // .arg(
+        //     Arg::new("version")
+        //         .short('v')
+        //         .long("version")
+        //         .action(clap::ArgAction::SetTrue)
+        //         .help("显示版本信息"),
+        // )
         .get_matches();
 
     run(args);
 }
 fn run(args: clap::ArgMatches) {
-    if args.get_flag("version") {
-        build_info::show_version_info();
-        return;
-    }
+    // if args.get_flag("version") {
+    //     build_info::show_version_info();
+    //     return;
+    // }
     let data_s: String;
     let data_e: String;
     if let Some(date1) = args.get_one::<String>("start_date") {
@@ -62,7 +62,7 @@ fn run(args: clap::ArgMatches) {
         data_e = date2.to_string();
     } else {
         println!(
-            "请输入开始日期！\
+            "请输入结束日期！\
          2026-01-03 或 20260103 格式"
         );
         return;
@@ -174,7 +174,7 @@ mod tests {
                     .short('s')
                     .long("start")
                     .value_name("DATE_START")
-                    // .required(true)
+                    .required(true)
                     .default_value(date_s)
                     .help("输入开始日期"),
             )
@@ -183,17 +183,17 @@ mod tests {
                     .short('e')
                     .long("end")
                     .value_name("DATE_END")
-                    // .required(true)
+                    .required(true)
                     .default_value(date_e)
                     .help("输入结束日期"),
             )
-            .arg(
-                Arg::new("version")
-                    .short('v')
-                    .long("version")
-                    .action(clap::ArgAction::SetFalse)
-                    .help("显示版本信息"),
-            )
+            // .arg(
+            //     Arg::new("version")
+            //         .short('v')
+            //         .long("version")
+            //         .action(clap::ArgAction::SetFalse)
+            //         .help("显示版本信息"),
+            // )
             .get_matches();
         args
     }

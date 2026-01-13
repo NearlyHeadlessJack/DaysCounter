@@ -203,7 +203,7 @@ jobs:
           mv ./linux_amd64/days_counter ./linux_amd64/days-counter-v${RELEASE_VERSION}-x86_64-unknown-linux-gnu
           mv ./windows_amd64/days_counter.exe ./windows_amd64/days-counter-v${RELEASE_VERSION}-x86_64-pc-windows-msvc.exe
           mv ./linux_loongarch64/days_counter ./linux_loongarch64/days-counter-v${RELEASE_VERSION}-loongarch64-unknown-linux-gnu
-          mv ./macos_universal/days_counter ./macos_universal/days-counter-v${RELEASE_VERSION}-universal-apple-darwin
+          mv ./macos_universal/days-counter_macos_universal ./macos_universal/days-counter-v${RELEASE_VERSION}-universal-apple-darwin
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
