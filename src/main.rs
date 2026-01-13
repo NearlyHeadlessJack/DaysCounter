@@ -25,24 +25,24 @@ fn main() {
                 .help("输入结束日期"),
         )
         .arg(
-            Arg::new("use_two")
-                .short('t')
-                .long("two")
+            Arg::new("use_all")
+                .short('a')
+                .long("all")
                 .action(clap::ArgAction::SetTrue)
                 .default_value("false")
-                .help("使用两日历替换算法"),
+                .help("使用全日历生成算法"),
         )
         .get_matches();
 
     run(args);
 }
 fn run(args: clap::ArgMatches) {
-    let mut algorithm: Algorithm = Algorithm::CreateAllCalendar;
-    if args.get_flag("use_two") {
-        algorithm = Algorithm::TwoCalendar;
-        println!("使用平闰日历轮替算法");
+    let mut algorithm: Algorithm = Algorithm::TwoCalendar;
+    if args.get_flag("use_all") {
+        algorithm = Algorithm::CreateAllCalendar;
+        println!("使用全日历生成算法");
     } else {
-        println!("使用创建所有日历算法");
+        println!("使用平闰年日历轮替算法");
     }
     let data_s: String;
     let data_e: String;
@@ -190,12 +190,12 @@ mod tests {
                     .help("输入结束日期"),
             )
             .arg(
-                Arg::new("use_two")
-                    .short('t')
-                    .long("two")
+                Arg::new("use_all")
+                    .short('a')
+                    .long("all")
                     .action(clap::ArgAction::SetTrue)
                     .default_value("false")
-                    .help("使用两日历替换算法"),
+                    .help("使用全日历生成算法"),
             )
             .get_matches();
         args
