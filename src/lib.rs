@@ -10,6 +10,11 @@ enum Order {
     Asc,
     Desc,
 }
+#[derive(PartialEq)]
+pub enum Algorithm {
+    CreateAllCalendar,
+    TwoCalendar,
+}
 
 impl Display for Order {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -20,7 +25,7 @@ impl Display for Order {
     }
 }
 
-pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
+pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32), algorithm: Algorithm) -> i32 {
     println!(
         "开始日期为: {}年{}月{}日\n\
     结束日期为: {}年{}月{}日",
@@ -44,7 +49,15 @@ pub fn calculator(date1: (i32, i32, i32), date2: (i32, i32, i32)) -> i32 {
     #[cfg(debug_assertions)]
     println!("[DEBUG]{}", order);
 
-    let mut days = calendar::main(year1, year2);
+    let mut days: i32 = 0;
+    match algorithm {
+        Algorithm::CreateAllCalendar => {
+            days = calendar::main(year1, year2);
+        }
+        Algorithm::TwoCalendar => {
+            days = calendar::main_two(year1, year2);
+        }
+    }
     if order == Order::Desc {
         days = -days;
     }

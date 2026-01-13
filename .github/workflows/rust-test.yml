@@ -6,35 +6,69 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  tests_on_linux_amd64:
+  a_tests_on_linux_amd64:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test test_calculator_create_all_calendar --verbose
 
 
 
-  tests_on_windows_amd64:
+  a_tests_on_windows_amd64:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test test_calculator_create_all_calendar --verbose
 
 
 
-  tests_on_macos_15-intel:
+  a_tests_on_macos_15-intel:
     runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test test_calculator_create_all_calendar --verbose
 
 
-  tests_on_macos-arm64:
+  a_tests_on_macos-arm64:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test test_calculator_create_all_calendar --verbose
+
+
+  b_tests_on_linux_amd64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: cargo test test_calculator_two_calendar --verbose
+
+
+
+  b_tests_on_windows_amd64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: cargo test test_calculator_two_calendar --verbose
+
+
+
+  b_tests_on_macos_15-intel:
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: cargo test test_calculator_two_calendar --verbose
+
+
+  b_tests_on_macos-arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: cargo test test_calculator_two_calendar --verbose

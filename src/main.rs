@@ -1,5 +1,5 @@
 use clap::{Arg, Command};
-use days_counter::calculator;
+use days_counter::{Algorithm, calculator};
 
 fn main() {
     let args = Command::new("days-counter")
@@ -24,22 +24,26 @@ fn main() {
                 .required(true)
                 .help("输入结束日期"),
         )
-        // .arg(
-        //     Arg::new("version")
-        //         .short('v')
-        //         .long("version")
-        //         .action(clap::ArgAction::SetTrue)
-        //         .help("显示版本信息"),
-        // )
+        .arg(
+            Arg::new("use_two")
+                .short('t')
+                .long("two")
+                .action(clap::ArgAction::SetTrue)
+                .default_value("false")
+                .help("使用两日历替换算法"),
+        )
         .get_matches();
 
     run(args);
 }
 fn run(args: clap::ArgMatches) {
-    // if args.get_flag("version") {
-    //     build_info::show_version_info();
-    //     return;
-    // }
+    let mut algorithm: Algorithm = Algorithm::CreateAllCalendar;
+    if args.get_flag("use_two") {
+        algorithm = Algorithm::TwoCalendar;
+        println!("使用平闰日历轮替算法");
+    } else {
+        println!("使用创建所有日历算法");
+    }
     let data_s: String;
     let data_e: String;
     if let Some(date1) = args.get_one::<String>("start_date") {
@@ -78,7 +82,7 @@ fn run(args: clap::ArgMatches) {
         println!("输入的日期有误！请重新检查日期。");
         return;
     }
-    calculator(date_start, date_end);
+    calculator(date_start, date_end, algorithm);
 }
 
 fn check_input(s: &str) -> Option<(i32, i32, i32)> {
@@ -185,13 +189,14 @@ mod tests {
                     .default_value(date_e)
                     .help("输入结束日期"),
             )
-            // .arg(
-            //     Arg::new("version")
-            //         .short('v')
-            //         .long("version")
-            //         .action(clap::ArgAction::SetFalse)
-            //         .help("显示版本信息"),
-            // )
+            .arg(
+                Arg::new("use TwoCalendar algorithm")
+                    .short('t')
+                    .long("two")
+                    .action(clap::ArgAction::SetTrue)
+                    .default_value("false")
+                    .help("使用两日历替换算法"),
+            )
             .get_matches();
         args
     }

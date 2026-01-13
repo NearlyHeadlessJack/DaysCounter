@@ -50,19 +50,44 @@ pub fn main(
     ) {
         total_days += calendar[(start_year - original_start_year) as usize]
             [(start_month - 1) as usize][(start_day - 1) as usize] as i32;
-        if start_month == 12 && start_day == 31 {
-            start_month = 1;
-            start_year += 1;
-            start_day = 1;
-        } else if start_day == 31 {
-            start_month += 1;
-            start_day = 1;
-        } else {
-            start_day += 1;
-        }
+        (start_year, start_month, start_day) = iter_calendar(start_year, start_month, start_day);
     }
 
     total_days
+
+    // 算法一结束
+}
+
+pub fn main_two(
+    (mut start_year, mut start_month, mut start_day): (i32, i32, i32),
+    (end_year, end_month, end_day): (i32, i32, i32),
+) -> i32 {
+    let mut total_days: i32 = 0;
+
+    // 算法二，只创建两个日历，分别为平年和闰年.
+    let regular_calendar: [[u8; 31]; 12] = create_calendar(false);
+    let leap_calendar: [[u8; 31]; 12] = create_calendar(true);
+
+    let original_start_year = start_year;
+    while !check_reach(
+        (start_year, start_month, start_day),
+        (end_year, end_month, end_day),
+    ) {
+        match check_leap(start_year) {
+            true => {
+                total_days +=
+                    leap_calendar[(start_month - 1) as usize][(start_day - 1) as usize] as i32;
+            }
+            false => {
+                total_days +=
+                    regular_calendar[(start_month - 1) as usize][(start_day - 1) as usize] as i32;
+            }
+        }
+        (start_year, start_month, start_day) = iter_calendar(start_year, start_month, start_day);
+    }
+    total_days
+
+    // 算法二结束
 }
 
 fn check_reach(
@@ -89,6 +114,21 @@ fn check_leap(year: i32) -> bool {
         return true;
     }
     false
+}
+
+fn iter_calendar(mut start_year: i32, mut start_month: i32, mut start_day: i32) -> (i32, i32, i32) {
+    if start_month == 12 && start_day == 31 {
+        start_month = 1;
+        start_year += 1;
+        start_day = 1;
+    } else if start_day == 31 {
+        start_month += 1;
+        start_day = 1;
+    } else {
+        start_day += 1;
+    }
+
+    (start_year, start_month, start_day)
 }
 
 #[cfg(test)]

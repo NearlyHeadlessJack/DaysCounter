@@ -1,8 +1,8 @@
 use chrono::NaiveDate;
-use days_counter::calculator;
+use days_counter::{Algorithm, calculator};
 use rand::Rng;
 #[test]
-fn test_calculator() {
+fn test_calculator_create_all_calendar() {
     let mut rng = rand::rng();
     const MAX_YEAR: i32 = 9999;
     for i in 1..=1000 {
@@ -17,7 +17,31 @@ fn test_calculator() {
             chrono_days((year1, month1, day1), (year2, month2, day2)),
             calculator(
                 (year1, month1 as i32, day1 as i32),
-                (year2, month2 as i32, day2 as i32)
+                (year2, month2 as i32, day2 as i32),
+                Algorithm::CreateAllCalendar,
+            )
+        );
+    }
+}
+
+#[test]
+fn test_calculator_two_calendar() {
+    let mut rng = rand::rng();
+    const MAX_YEAR: i32 = 9999;
+    for i in 1..=1000 {
+        println!("\n\nterm: {}", i);
+        let month1 = rng.random_range(1..=12);
+        let day1 = rng.random_range(1..=28);
+        let year1 = rng.random_range(1900..=MAX_YEAR);
+        let month2 = rng.random_range(1..=12);
+        let day2 = rng.random_range(1..=28);
+        let year2 = rng.random_range(1900..=MAX_YEAR);
+        assert_eq!(
+            chrono_days((year1, month1, day1), (year2, month2, day2)),
+            calculator(
+                (year1, month1 as i32, day1 as i32),
+                (year2, month2 as i32, day2 as i32),
+                Algorithm::TwoCalendar,
             )
         );
     }
