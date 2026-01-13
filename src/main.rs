@@ -190,7 +190,7 @@ mod tests {
                     .help("输入结束日期"),
             )
             .arg(
-                Arg::new("use TwoCalendar algorithm")
+                Arg::new("use_two")
                     .short('t')
                     .long("two")
                     .action(clap::ArgAction::SetTrue)
