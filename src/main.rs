@@ -1,5 +1,3 @@
-mod build_info;
-
 use clap::{Arg, Command};
 use days_counter::calculator;
 
@@ -174,7 +172,7 @@ mod tests {
                     .short('s')
                     .long("start")
                     .value_name("DATE_START")
-                    .required(true)
+                    // .required(true)
                     .default_value(date_s)
                     .help("输入开始日期"),
             )
@@ -183,7 +181,7 @@ mod tests {
                     .short('e')
                     .long("end")
                     .value_name("DATE_END")
-                    .required(true)
+                    // .required(true)
                     .default_value(date_e)
                     .help("输入结束日期"),
             )
