@@ -15,7 +15,7 @@ fn main() {
                 .short('s')
                 .long("start")
                 .value_name("DATE_START")
-                // .required(true)
+                .required(true)
                 .help("输入开始日期"),
         )
         .arg(
@@ -23,7 +23,7 @@ fn main() {
                 .short('e')
                 .long("end")
                 .value_name("DATE_END")
-                // .required(true)
+                .required(true)
                 .help("输入结束日期"),
         )
         // .arg(
